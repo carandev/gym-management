@@ -1,0 +1,15 @@
+import { createDefaultPreset } from "ts-jest";
+
+const tsJestTransformCfg = createDefaultPreset().transform;
+
+/** @type {import("jest").Config} **/
+export default {
+  testEnvironment: "node",
+  transform: {
+    ...tsJestTransformCfg,
+  },
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  testMatch: ['**/tests/**/*.test.ts'], // Carpeta tests
+  moduleFileExtensions: ['ts', 'js', 'json'],
+};

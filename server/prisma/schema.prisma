@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- ENUM ----------
+enum Role {
+  SYSTEM_ADMIN
+  TENANT_ADMIN
+  TRAINER
+  MEMBER
+}
+
+// ---------- MODELS ----------
+model Tenant {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  branches Branch[]
+  users    TenantUser[]
+}
+
+model Branch {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenantId Int
+  tenant   Tenant    @relation(fields: [tenantId], references: [id])
+  machines Machine[]
+}
+
+model TenantUser {
+  id        Int      @id @default(autoincrement())
+  role      Role     @default(MEMBER)
+  clerkId   String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenantId Int
+  tenant   Tenant @relation(fields: [tenantId], references: [id])
+}
+
+model Machine {
+  id        Int      @id @default(autoincrement())
+  name      String
+  photoUrl  String?
+  videoUrl  String?
+  branchId  Int
+  branch    Branch   @relation(fields: [branchId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  muscles MachineMuscle[]
+}
+
+model Muscle {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  machines MachineMuscle[]
+}
+
+// ---------- RELACIÓN N:M ----------
+model MachineMuscle {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  machineId Int
+  muscleId  Int
+
+  machine Machine @relation(fields: [machineId], references: [id])
+  muscle  Muscle  @relation(fields: [muscleId], references: [id])
+
+  @@id([machineId, muscleId])
+}
