@@ -18,7 +18,7 @@ export default function SignUpScreen() {
 
         // Start sign-up process using email and password provided
         try {
-            await signUp.create({
+            const resource = await signUp.create({
                 emailAddress,
                 password,
             })

@@ -3,14 +3,6 @@ import type { AppRouter } from '../../server/src/trpc/router.ts'
 
 export const trpc = createTRPCReact<AppRouter>()
 
-export const trpcClient = trpc.createClient({
-  links: [
-    httpBatchLink({
-      url: 'http://192.168.101.20:3000/trpc'
-    })
-  ]
-})
-
 export const getTrpcClient = (getToken: () => Promise<string | null>) =>
     trpc.createClient({
         links: [

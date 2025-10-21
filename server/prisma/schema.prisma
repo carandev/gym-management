@@ -41,11 +41,13 @@ model TenantUser {
   id        Int      @id @default(autoincrement())
   role      Role     @default(MEMBER)
   clerkId   String   @unique
+  email     String   @unique
+  username  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  tenantId Int
-  tenant   Tenant @relation(fields: [tenantId], references: [id])
+  tenantId Int?
+  tenant   Tenant? @relation(fields: [tenantId], references: [id])
 }
 
 model Machine {
